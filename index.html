@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SATRIA - Manajemen Kata Sandi (Demo Pro)</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn-icons-png.flaticon.com/512/306/306233.png" alt="SATRIA Logo" class="app-logo">
+            <h1>SATRIA</h1>
+        </div>
+        <p class="warning">
+            ⚠️ DEMO SAJA: Aplikasi ini **HANYA** untuk tujuan pembelajaran dan **tidak aman** untuk menyimpan kata sandi asli Anda.
+            Data brankas terenkripsi disimpan di database SQLite backend.
+        </p>
+
+        <div id="auth-section">
+            <h2><i class="fas fa-lock"></i> Masuk / Daftar</h2>
+            <div class="input-group">
+                <label for="userEmail">Email:</label>
+                <input type="email" id="userEmail" placeholder="Masukkan email Anda">
+            </div>
+            <div class="input-group">
+                <label for="masterPassword">Kata Sandi Utama:</label>
+                <input type="password" id="masterPassword" placeholder="Masukkan kata sandi utama Anda">
+            </div>
+            <button id="loginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <button id="registerBtn"><i class="fas fa-user-plus"></i> Daftar & Buat Brankas Baru</button>
+        </div>
+
+        <div id="main-app" style="display: none;">
+            <div class="top-bar">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchTerm" placeholder="Cari...">
+                </div>
+                <div class="user-info">
+                    <img src="https://via.placeholder.com/30" alt="User Avatar" class="user-avatar">
+                    <span id="loggedInUserEmail"></span>
+                    <i class="fas fa-caret-down"></i>
+                    <button id="logoutBtn" class="logout-btn">Logout</button>
+                </div>
+            </div>
+
+            <div class="app-content">
+                <div class="sidebar">
+                    <button id="createRecordBtn" class="sidebar-btn create-new"><i class="fas fa-plus-circle"></i> Create New</button>
+                    <ul class="nav-list">
+                        <li class="nav-item active" data-view="my-vault">
+                            <i class="fas fa-lock"></i> My Vault
+                        </li>
+                        <li class="nav-item" data-view="banking">
+                            <i class="fas fa-university"></i> Banking
+                        </li>
+                        <li class="nav-item" data-view="identity">
+                            <i class="fas fa-id-card"></i> Identity & Payments
+                        </li>
+                        <li class="nav-item" data-view="security-audit">
+                            <i class="fas fa-shield-alt"></i> Security Audit
+                        </li>
+                        <li class="nav-item" data-view="breachwatch">
+                            <i class="fas fa-bell"></i> BreachWatch
+                        </li>
+                        <li class="nav-item" data-view="deleted-items">
+                            <i class="fas fa-trash-alt"></i> Deleted Items
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="main-content">
+                    <div id="vault-list-view">
+                        <div class="list-header">
+                            <h2>My Vault</h2>
+                            <div class="list-actions">
+                                <span><strong id="recordCount">0</strong> Records</span>
+                                </div>
+                        </div>
+                        <ul id="recordList">
+                            <li class="empty-list-message">Tidak ada record. Klik "Create New" untuk menambahkan.</li>
+                        </ul>
+                    </div>
+
+                    <div id="record-form-view" style="display: none;">
+                        <div class="form-header">
+                            <h2 id="formTitle">New Record</h2>
+                            <div class="form-actions">
+                                <button id="cancelFormBtn" class="secondary-btn"><i class="fas fa-times"></i> Cancel</button>
+                                <button id="saveRecordBtn" class="primary-btn"><i class="fas fa-save"></i> Save</button>
+                            </div>
+                        </div>
+                        <div class="form-body">
+                            <input type="hidden" id="recordId"> <div class="form-group">
+                                <label for="formRecordType">Record Type</label>
+                                <select id="formRecordType" disabled>
+                                    <option value="login">Login</option>
+                                    </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formTitleInput">Title (Required)</label>
+                                <input type="text" id="formTitleInput" placeholder="e.g. HubSpot">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formLoginInput">Login</label>
+                                <input type="text" id="formLoginInput" placeholder="e.g. user@keeperdemo.io">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formPasswordInput">Password</label>
+                                <div class="password-input-group">
+                                    <input type="password" id="formPasswordInput" placeholder="********">
+                                    <button class="password-toggle-btn" type="button"><i class="fas fa-eye"></i></button>
+                                    <button class="password-generate-btn" type="button"><i class="fas fa-dice"></i></button>
+                                </div>
+                                <div class="password-strength-meter" style="display: none;">
+                                    <span class="strength-bar"></span>
+                                    <span class="strength-text"></span>
+                                </div>
+                                <div class="password-options" style="display: none;">
+                                    <label>Length: <span id="passwordLengthValue">16</span></label>
+                                    <input type="range" id="passwordLengthSlider" min="8" max="64" value="16">
+                                    <input type="checkbox" id="includeAZ"> <label for="includeAZ">A-Z</label>
+                                    <input type="checkbox" id="include09"> <label for="include09">0-9</label>
+                                    <input type="checkbox" id="includeSpecial"> <label for="includeSpecial">!@#</label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="formWebsiteAddress">Website Address</label>
+                                <input type="url" id="formWebsiteAddress" placeholder="https://example.com">
+                            </div>
+
+                            <div class="form-group info-text">
+                                <p>Fitur seperti Files, Two-Factor Code, dan Custom Fields tidak diimplementasikan dalam demo ini.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
