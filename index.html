@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SATRIA - Manajemen Kata Sandi (Demo Publik)</title>
+    <title>SATRIA - Manajemen Kata Sandi (Demo Pro)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -14,20 +14,22 @@
             <h1>SATRIA</h1>
         </div>
         <p class="warning">
-            ⚠️ DEMO PUBLIK: Aplikasi ini **HANYA** untuk tujuan pembelajaran.
-            **TIDAK ADA AUTENTIKASI.** Siapa pun yang mengakses URL ini dapat melihat dan memodifikasi data.
+            ⚠️ DEMO PUBLIK: Aplikasi ini **HANYA** untuk tujuan pembelajaran dan **TIDAK ADA AUTENTIKASI.** Siapa pun yang mengakses URL ini dapat melihat dan memodifikasi data.
             Data brankas terenkripsi dengan kunci statis dan disimpan di database SQLite backend.
+            <br>
+            **PENTING: Data di bawah ini adalah HARDCODED di HTML untuk demo tampilan. Tidak aman untuk data sungguhan!**
         </p>
 
-        <div id="main-app"> <div class="top-bar">
+        <div id="main-app" style="display: flex;"> <div class="top-bar">
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchTerm" placeholder="Cari...">
                 </div>
                 <div class="user-info">
                     <img src="https://via.placeholder.com/30" alt="User Avatar" class="user-avatar">
-                    <span id="loggedInUserEmail">Pengguna Publik</span> <i class="fas fa-caret-down"></i>
-                    </div>
+                    <span id="loggedInUserEmail">Pengguna Demo</span> <i class="fas fa-caret-down"></i>
+                    <button id="logoutBtn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout (Demo)</button>
+                </div>
             </div>
 
             <div class="app-content">
@@ -60,12 +62,179 @@
                         <div class="list-header">
                             <h2>My Vault</h2>
                             <div class="list-actions">
-                                <span><strong id="recordCount">0</strong> Records</span>
-                            </div>
+                                <span><strong id="recordCount">13</strong> Records</span> </div>
                         </div>
                         <ul id="recordList">
-                            <li class="empty-list-message">Tidak ada record. Klik "Create New" untuk menambahkan.</li>
-                        </ul>
+                            <li data-id="1">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Akun Bank BCA</strong>
+                                    <span>Username: user_bca</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="2">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Email Gmail Utama</strong>
+                                    <span>Username: nama.anda@gmail.com</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="3">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Akun Shopee</strong>
+                                    <span>Username: shopee_user</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="4">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Tokopedia Login</strong>
+                                    <span>Username: toped_user</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="5">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Netflix Akun</strong>
+                                    <span>Username: naufal@email.com</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="6">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Spotify Premium</strong>
+                                    <span>Username: musikku@email.com</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="7">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Facebook Pribadi</strong>
+                                    <span>Username: myfbprofile</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="8">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Instagram Foto</strong>
+                                    <span>Username: ig_nama_saya</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="9">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>LinkedIn Profesional</strong>
+                                    <span>Username: nama_profesional</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="10">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Akun Gojek</strong>
+                                    <span>Username: nomorhp_gojek</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="11">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Akun Grab</strong>
+                                    <span>Username: nomorhp_grab</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="12">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>VPN Service</strong>
+                                    <span>Username: vpn_id</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            <li data-id="13">
+                                <i class="fas fa-desktop record-icon"></i>
+                                <div class="record-details">
+                                    <strong>Pusdatik Internal</strong>
+                                    <span>Username: admin@pusdatik.id</span>
+                                </div>
+                                <div class="record-actions">
+                                    <button class="edit-record-btn"><i class="fas fa-edit"></i> Edit</button>
+                                    <button class="copy-username-btn"><i class="fas fa-user"></i> Salin User</button>
+                                    <button class="copy-password-btn"><i class="fas fa-key"></i> Salin Pass</button>
+                                    <button class="delete-record-btn"><i class="fas fa-trash-alt"></i> Hapus</button>
+                                </div>
+                            </li>
+                            </ul>
                     </div>
 
                     <div id="record-form-view" style="display: none;">
