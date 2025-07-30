@@ -93,6 +93,10 @@ async function decryptData(encryptedB64, key) {
 
 // --- Fungsi Aplikasi Utama ---
 
+// ... (kode JavaScript sebelumnya) ...
+
+// --- Fungsi Aplikasi Utama ---
+
 async function handleLogin() {
     const email = userEmailInput.value.trim();
     const masterPassword = masterPasswordInput.value;
@@ -114,15 +118,23 @@ async function handleLogin() {
         if (response.ok) {
             currentUserId = data.userId;
             currentSessionId = data.sessionId;
-            loggedInUserEmailSpan.textContent = email; // Tampilkan email pengguna
+            loggedInUserEmailSpan.textContent = email;
             const salt = strToBufB64(data.masterSalt);
             
             encryptionKey = await deriveKey(masterPassword, salt);
-            const decryptedVault = await decryptData(data.encryptedVaultBlob, encryptionKey);
+            let decryptedVault = await decryptData(data.encryptedVaultBlob, encryptionKey);
 
             if (decryptedVault !== null) {
-                // Konversi data brankas dari objek menjadi array untuk CRUD yang lebih mudah
                 vaultData = Object.values(JSON.parse(decryptedVault));
+
+                // --- START MODIFIKASI UNTUK DATA DUMMY ---
+                // Jika brankas kosong setelah dekripsi, tambahkan data dummy
+                if (vaultData.length === 0) {
+                    console.log("Brankas kosong, menambahkan data dummy...");
+                    await addDummyData();
+                }
+                // --- AKHIR MODIFIKASI UNTUK DATA DUMMY ---
+
                 renderRecordList();
                 showMainApp();
                 alert("Login berhasil!");
@@ -150,7 +162,24 @@ async function handleRegister() {
 
     const salt = generateSalt();
     const initialEncryptionKey = await deriveKey(masterPassword, salt);
-    const initialEncryptedVaultBlob = await encryptData(JSON.stringify({}), initialEncryptionKey);
+    
+    // Inisialisasi vaultData kosong di memori untuk register
+    vaultData = []; // Pastikan ini array kosong
+    encryptionKey = initialEncryptionKey; // Set kunci sementara untuk enkripsi dummy data
+
+    // --- START MODIFIKASI UNTUK DATA DUMMY SAAT REGISTER ---
+    // Tambahkan data dummy sebelum dienkripsi dan disimpan
+    console.log("Mendaftar, menambahkan data dummy...");
+    await addDummyData(); // Tambahkan data dummy ke vaultData
+    // --- AKHIR MODIFIKASI UNTUK DATA DUMMY SAAT REGISTER ---
+
+    // Enkripsi vaultData yang sudah berisi dummy data
+    const initialEncryptedVaultBlob = await encryptData(JSON.stringify(
+        vaultData.reduce((obj, item) => {
+            obj[item.id] = item;
+            return obj;
+        }, {})
+    ), initialEncryptionKey);
 
     try {
         const response = await fetch(`${BACKEND_URL}/register`, {
@@ -174,10 +203,50 @@ async function handleRegister() {
     } catch (e) {
         console.error("Kesalahan jaringan atau server:", e);
         alert("Terjadi kesalahan saat menghubungi server. Pastikan backend berjalan.");
+    } finally {
+        // Reset kunci dan data setelah register selesai
+        encryptionKey = null;
+        vaultData = {};
     }
 }
 
-async function saveVaultToBackend() {
+// Fungsi baru untuk menambahkan data dummy
+async function addDummyData() {
+    const dummyRecords = [
+        { type: 'login', title: 'Akun Bank BCA', username: 'user_bca', password: 'PasswordBCA!23', website: 'https://klikbca.com' },
+        { type: 'login', title: 'Email Gmail Utama', username: 'nama.anda@gmail.com', password: 'EmailSayaKuat!@#$', website: 'https://mail.google.com' },
+        { type: 'login', title: 'Akun Shopee', username: 'shopee_user', password: 'BelanjaHemat2025', website: 'https://shopee.co.id' },
+        { type: 'login', title: 'Tokopedia Login', username: 'toped_user', password: 'CariPromoTerus#', website: 'https://tokopedia.com' },
+        { type: 'login', title: 'Netflix Akun', username: 'naufal@email.com', password: 'NontonTerus@flix', website: 'https://netflix.com' },
+        { type: 'login', title: 'Spotify Premium', username: 'musikku@email.com', password: 'DengarkanMusik$!', website: 'https://spotify.com' },
+        { type: 'login', title: 'Facebook Pribadi', username: 'myfbprofile', password: 'SosialMediaKu_24', website: 'https://facebook.com' },
+        { type: 'login', title: 'Instagram Foto', username: 'ig_nama_saya', password: 'PostingTerus!?', website: 'https://instagram.com' },
+        { type: 'login', title: 'LinkedIn Profesional', username: 'nama_profesional', password: 'KerjaPenting##', website: 'https://linkedin.com' },
+        { type: 'login', title: 'Akun Gojek', username: 'nomorhp_gojek', password: 'OjekOnline_Gojek', website: 'https://gojek.com' },
+        { type: 'login', title: 'Akun Grab', username: 'nomorhp_grab', password: 'GrabBikeMantap!', website: 'https://grab.com' },
+        { type: 'login', title: 'VPN Service', username: 'vpn_id', password: 'AksesAman!@#$', website: 'https://myvpnservice.com' },
+        { type: 'login', title: 'Pusdatik Internal', username: 'admin@pusdatik.id', password: 'PusdatikRahasia!#$', website: 'https://internal.pusdatik.id' }
+    ];
+
+    for (const record of dummyRecords) {
+        const id = crypto.randomUUID(); // Buat ID unik untuk setiap record dummy
+        const encryptedPassword = await encryptData(record.password, encryptionKey); // Enkripsi password dummy
+
+        vaultData.push({
+            id: id,
+            type: record.type,
+            title: record.title,
+            username: record.username,
+            password: encryptedPassword,
+            website: record.website
+        });
+    }
+    // Simpan vaultData yang sudah berisi dummy data ke backend
+    await saveVaultToBackend();
+    console.log("Data dummy berhasil ditambahkan dan disimpan.");
+}
+
+// ... (sisa kode JavaScript) ...async function saveVaultToBackend() {
     if (!encryptionKey || !currentUserId || !currentSessionId) {
         console.error("Tidak ada kunci enkripsi atau pengguna/sesi tidak valid.");
         return;
